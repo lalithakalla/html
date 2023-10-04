@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+
+    <input type="email" id="emailInput" placeholder="Enter your email">
+    <button onclick="registerUser()">Register</button>
+
+    <h2>Registered Users:</h2>
+    <ul id="userList"></ul>
+
+    <script>
+        // Array to store registered users
+        const registeredUsers = [];
+
+        // Function to register a user
+function registerUser() {
+            const emailInput = document.getElementById('emailInput');
+            const email = emailInput.value.trim();
+
+            // Check if the email is valid
+            if (validateEmail(email)) {
+                // Add the email to the list of registered users
+                registeredUsers.push(email);
+                emailInput.value = ''; // Clear the input field
+                displayRegisteredUsers();
+            } else {
+                alert('Invalid email address');
+            }
+        }
