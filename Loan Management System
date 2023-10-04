@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Management System</title>
+</head>
+<body>
+    <h1>Welcome to Loan Management System</h1>
+
+    <h2>User Registration</h2>
+    <input type="email" id="emailInput" placeholder="Enter your email">
+    <button onclick="registerUser()">Register</button>
+
+    <h2>User Roles</h2>
+    <label for="roleSelect">Select your role:</label>
+    <select id="roleSelect">
+        <option value="borrower">Borrower</option>
+        <option value="lender">Lender</option>
+    </select>
+    <button onclick="setUserRole()">Set Role</button>
+<h2>User Dashboard</h2>
+    <div id="userDashboard"></div>
+
+    <h2>Admin Dashboard</h2>
+    <div id="adminDashboard"></div>
+
+    <script>
+        const registeredUsers = [];
+        let currentUser = null;
+
+        function registerUser() {
+            const emailInput = document.getElementById('emailInput');
+            const email = emailInput.value.trim();
+
+            if (validateEmail(email)) {
+                registeredUsers.push({ email, role: null, loans: [] });
+                emailInput.value = '';
+            } else {
+                alert('Invalid email address');
+            }
+        }
+
+        function setUserRole() {
+            const roleSelect = document.getElementById('roleSelect');
+            const selectedRole = roleSelect.value;
+
+            if (currentUser && currentUser.role === null) {
+                currentUser.role = selectedRole;
+                updateUserDashboard();
+            }
+        }
+
+        function validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailPattern.test(email);
+        }
+
+        function updateUserDashboard() {
+            const userDashboard = document.getElementById('userDashboard');
+            userDashboard.innerHTML = '';
+
+            if (currentUser) {
+                userDashboard.innerHTML = `
+                    <p>Email: ${currentUser.email}</p>
+                    <p>Role: ${currentUser.role || 'Not set'}</p>
+                `;
+            }
+        }
+
+        function updateAdminDashboard() {
+            const adminDashboard = document.getElementById('adminDashboard');
+            adminDashboard.innerHTML = '';
+
+            if (currentUser && currentUser.role === 'admin') {
+                adminDashboard.innerHTML = `
+                    <h3>Registered Users</h3>
+                    <ul>
+                        ${registeredUsers.map(user => `<li>${user.email} - Role: ${user.role || 'Not set'}</li>`).join('')}
+                    </ul>
+                `;
+            }
+        }
+
+        function refreshDashboard() {
+            updateUserDashboard();
+            updateAdminDashboard();
+        }
+
+        setInterval(refreshDashboard, 1000); // Update dashboard every second
+    </script>
+</body>
+</html>
